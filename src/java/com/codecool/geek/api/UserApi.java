@@ -1,7 +1,7 @@
-package com.codecool.geek.controller;
+package com.codecool.geek.api;
 
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class UserApi {
 }
