@@ -7,7 +7,7 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @MapsId
@@ -16,7 +16,12 @@ public class Answer {
     private String answer;
 
 
-    public Answer() {
+    private Answer() {
+    }
+
+    public Answer(Question question, String answer) {
+        this.question = question;
+        this.answer = answer;
     }
 
     public long getId() {
