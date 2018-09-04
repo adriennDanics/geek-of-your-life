@@ -142,3 +142,5 @@ buildNumber.properties
 persistence.xml
 application.properties
 .idea/*
+
+geek-of-your-life.iml
