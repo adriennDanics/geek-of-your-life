@@ -10,7 +10,7 @@ public class Answer {
     private Long id;
 
     @ManyToOne
-    @MapsId
+    //@MapsId
     private Question question;
 
     private String answer;
@@ -24,11 +24,11 @@ public class Answer {
         this.answer = answer;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
