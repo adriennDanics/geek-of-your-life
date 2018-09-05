@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AnswerService {
 
     @Autowired
-    AnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     public void saveAnswer(Answer answer) {
         answerRepository.save(answer);
