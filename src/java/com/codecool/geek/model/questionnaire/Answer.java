@@ -10,7 +10,6 @@ public class Answer {
     private Long id;
 
     @ManyToOne
-    //@MapsId
     private Question question;
 
     private String answer;
