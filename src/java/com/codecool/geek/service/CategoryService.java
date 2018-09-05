@@ -24,4 +24,8 @@ public class CategoryService {
     public String getCategoryById(Long categoryId) {
         return categoryRepository.findCategoryById(categoryId);
     }
+
+    public List<String> getAllCategories() {
+        return categoryRepository.findCategory();
+    }
 }
