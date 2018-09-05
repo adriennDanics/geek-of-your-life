@@ -16,7 +16,7 @@ public class Answer {
     private String answer;
 
 
-    private Answer() {
+    public Answer() {
     }
 
     public Answer(Question question, String answer) {
@@ -46,5 +46,14 @@ public class Answer {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", question=" + question +
+                ", answer='" + answer + '\'' +
+                '}';
     }
 }
