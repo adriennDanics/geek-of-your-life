@@ -20,7 +20,7 @@ public class User {
         this.password = password;
     }
 
-    public User() {
+    private User() {
     }
 
     public long getId() {

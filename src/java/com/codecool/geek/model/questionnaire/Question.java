@@ -13,7 +13,7 @@ public class Question {
 
     private String question;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "question")
     private Set<Answer> answers = new HashSet<>();
 
     public Question(String question, Set<Answer> answers) {
@@ -21,7 +21,7 @@ public class Question {
         this.answers = answers;
     }
 
-    public Question() {
+    private Question() {
     }
 
     public long getId() {
