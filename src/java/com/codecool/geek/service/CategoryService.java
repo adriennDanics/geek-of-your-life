@@ -21,11 +21,15 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public String getCategoryById(Long categoryId) {
+    public String getCategoryNameById(Long categoryId) {
         return categoryRepository.findCategoryById(categoryId);
     }
 
-    public List<String> getAllCategories() {
+    public Category getCategoryById(Long categoryId) {
+        return categoryRepository.findAllById(categoryId);
+    }
+
+    public List<String> getAllCategoryNames() {
         return categoryRepository.findCategory();
     }
 }
