@@ -1,6 +1,7 @@
 package com.codecool.geek.service;
 
 import com.codecool.geek.model.questionnaire.Answer;
+import com.codecool.geek.model.questionnaire.Category;
 import com.codecool.geek.model.questionnaire.Question;
 import com.codecool.geek.repository.AnswerRepository;
 import com.codecool.geek.repository.QuestionRepository;
@@ -16,7 +17,10 @@ public class QuestionService {
     private QuestionRepository questionRepository;
 
     @Autowired
-    AnswerService answerService;
+    private AnswerService answerService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public void saveQuestion(Question question) {
         questionRepository.save(question);
@@ -35,8 +39,8 @@ public class QuestionService {
         Answer a = new Answer(q, "adadasdadasdasd");
         answerService.saveAnswer(a);
 
-
-        System.err.println(q + "\n\n" + a);
+        Category category = new Category("Kategoria1", "This is sparta", "This is image");
+        categoryService.saveCategory(category);
 
     }
 }
