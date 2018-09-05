@@ -9,7 +9,6 @@ public class UserDetail {
     private long id;
 
     @OneToOne
-    @MapsId
     private User user;
 
     private String fullName;
