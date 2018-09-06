@@ -17,11 +17,19 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public List<Category> getAllCategory() {
+    public List<Category> getAllCategoryDetails() {
         return categoryRepository.findAll();
     }
 
-    public List<Category> getCategoryById(Long categoryId) {
+    public String getCategoryNameById(Long categoryId) {
+        return categoryRepository.findCategoryById(categoryId);
+    }
+
+    public Category getCategoryById(Long categoryId) {
         return categoryRepository.findAllById(categoryId);
+    }
+
+    public List<String> getAllCategoryNames() {
+        return categoryRepository.findCategory();
     }
 }
