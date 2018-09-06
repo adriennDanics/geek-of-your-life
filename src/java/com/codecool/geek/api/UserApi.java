@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class UserApi {
@@ -76,18 +77,29 @@ public class UserApi {
     }
 
     @RequestMapping(value = "/user/{userId}/categories", method = RequestMethod.GET)
-    public List<Category> getCategoriesByUserId(@PathVariable("userId") Long userId){
+    public Set<Category> getCategoriesByUserId(@PathVariable("userId") Long userId){
 
-        //Category category = categoryService.
-
-        return null;
+        UserDetail user = userDetailService.findByUserId(userId);
+        return user.getCategories();
     }
 
     @RequestMapping(value = "/user/{userId}/{categoryId}", method = RequestMethod.GET)
-    public Category getQuestionWithAnswer(@PathVariable("userId") Long userId,
+    public ResponseEntity<?> getQuestionWithAnswer(@PathVariable("userId") Long userId,
                                       @PathVariable("categoryId") Long categoryId){
 
-        return null;
+        UserDetail user = userDetailService.findByUserId(userId);
+        Set<Category> categories = user.getCategories();
+
+        for (Category cat : categories) {
+            if (cat.getId().equals(categoryId)) {
+                return new ResponseEntity<>(cat, HttpStatus.OK);
+            }
+        }
+
+
+        return new ResponseEntity<>("I am a TEAPOT, you're an idiot",HttpStatus.I_AM_A_TEAPOT);
+
+
     }
 
 
