@@ -2,6 +2,7 @@ package com.codecool.geek.api;
 
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
+import com.codecool.geek.model.questionnaire.Category;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.json.simple.JSONObject;
@@ -26,6 +27,15 @@ public class UserApi {
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
         userService.saveUser(new User(email, password));
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> createNewUser(@PathVariable("id") Long id, @RequestParam("category") String category){
+        User user = userService.findById(id);
+        UserDetail userDetail = new UserDetail(user);
+        userDetail.addCategory(new Category(category));
+        userDetailService.saveUserDetail(userDetail);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 

@@ -14,4 +14,8 @@ public class UserDetailService {
     public UserDetail findByUserId(Long id) {
         return userDetailsRepository.findByUserId(id);
     }
+
+    public void saveUserDetail(UserDetail userDetail){
+        userDetailsRepository.save(userDetail);
+    }
 }
