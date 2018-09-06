@@ -2,6 +2,7 @@ package com.codecool.geek.api;
 
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
+import com.codecool.geek.model.questionnaire.Category;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.json.simple.JSONObject;
@@ -60,4 +61,19 @@ public class UserApi {
         JSONObject response = new JSONObject(userInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/user/{userId}/categories", method = RequestMethod.GET)
+    public Category getCategoriesById(@PathVariable("userId") Long userId){
+
+        return null;
+    }
+
+    @RequestMapping(value = "/user/{userId}/{categoryId}", method = RequestMethod.GET)
+    public Category getQuestionWithAnswer(@PathVariable("userId") Long userId,
+                                      @PathVariable("categoryId") Long categoryId){
+
+        return null;
+    }
+
+
 }
