@@ -1,6 +1,10 @@
 package com.codecool.geek.model.questionnaire;
 
+import com.codecool.geek.model.customer.UserDetail;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Category {
@@ -16,7 +20,14 @@ public class Category {
     @Column(columnDefinition = "TEXT")
     private String image;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "categories")
+    private Set<UserDetail> users = new HashSet<>();
+
     private Category() {
+    }
+
+    public Category(String category) {
+        this.category = category;
     }
 
     public Category(String category, String shortDescription, String image) {

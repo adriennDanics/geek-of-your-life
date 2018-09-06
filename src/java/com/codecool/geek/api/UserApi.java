@@ -30,6 +30,15 @@ public class UserApi {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> createNewUser(@PathVariable("id") Long id, @RequestParam("category") String category){
+        User user = userService.findById(id);
+        UserDetail userDetail = new UserDetail(user);
+        userDetail.addCategory(new Category(category));
+        userDetailService.saveUserDetail(userDetail);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> getUserList(){
         Map<String, Map<String, String>> users = new HashMap<>();

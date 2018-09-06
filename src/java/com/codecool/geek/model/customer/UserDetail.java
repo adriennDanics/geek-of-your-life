@@ -1,11 +1,16 @@
 package com.codecool.geek.model.customer;
 
+import com.codecool.geek.model.questionnaire.Category;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class UserDetail {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToOne
@@ -16,6 +21,13 @@ public class UserDetail {
 
     @Temporal(TemporalType.DATE)
     private Date birthDate;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "User_category",
+            joinColumns = @JoinColumn(name = "UserDetail"),
+            inverseJoinColumns = @JoinColumn(name = "Category"))
+    private Set<Category> categories = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -92,5 +104,17 @@ public class UserDetail {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void setCategories(Set<Category> categories){
+        this.categories = categories;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void addCategory(Category category){
+        this.categories.add(category);
     }
 }
