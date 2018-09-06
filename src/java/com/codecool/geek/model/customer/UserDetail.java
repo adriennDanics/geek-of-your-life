@@ -38,6 +38,9 @@ public class UserDetail {
     @Column(columnDefinition = "TEXT")
     private String profileImage;
 
+    public UserDetail() {
+    }
+
     public UserDetail(User user) {
         this.user = user;
     }
