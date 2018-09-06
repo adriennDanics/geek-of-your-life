@@ -14,6 +14,9 @@ public class Question {
 
     private String question;
 
+    @OneToOne
+    private Category category;
+
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
