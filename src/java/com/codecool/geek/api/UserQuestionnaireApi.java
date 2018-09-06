@@ -25,7 +25,7 @@ public class UserQuestionnaireApi {
     @RequestMapping(value = "/add-question", method = RequestMethod.POST)
     public String addQuestion() {
 
-        questionService.init();
+        //questionService.init();
 
 
         return "success";
