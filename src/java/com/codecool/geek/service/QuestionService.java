@@ -16,23 +16,23 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @Autowired
+/*    @Autowired
     private AnswerService answerService;
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryService categoryService;*/
 
     public void saveQuestion(Question question) {
         questionRepository.save(question);
     }
 
     public List<Question> getAllQuestion() {
-        init();
+        //init();
         return questionRepository.findAll();
     }
 
 
-    public void init() {
+    /*public void init() {
         Question q = new Question("sdasddsa");
         saveQuestion(q);
 
@@ -40,7 +40,7 @@ public class QuestionService {
         answerService.saveAnswer(a);
 
         Category category = new Category("Kategoria1", "This is sparta", "This is image");
-        categoryService.saveCategory(category);
+        //categoryService.saveCategory(category);
 
-    }
+    }*/
 }

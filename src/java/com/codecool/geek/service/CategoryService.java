@@ -11,7 +11,7 @@ import java.util.List;
 public class CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    CategoryRepository categoryRepository;
 
     public void saveCategory(Category category) {
         categoryRepository.save(category);
@@ -27,9 +27,5 @@ public class CategoryService {
 
     public Category getCategoryById(Long categoryId) {
         return categoryRepository.findAllById(categoryId);
-    }
-
-    public List<String> getAllCategoryNames() {
-        return categoryRepository.findCategory();
     }
 }

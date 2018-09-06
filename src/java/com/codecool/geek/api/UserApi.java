@@ -3,6 +3,7 @@ package com.codecool.geek.api;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
+import com.codecool.geek.service.CategoryService;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.json.simple.JSONObject;
@@ -23,6 +24,9 @@ public class UserApi {
 
     @Autowired
     UserDetailService userDetailService;
+
+    @Autowired
+    CategoryService categoryService;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
@@ -72,7 +76,9 @@ public class UserApi {
     }
 
     @RequestMapping(value = "/user/{userId}/categories", method = RequestMethod.GET)
-    public Category getCategoriesById(@PathVariable("userId") Long userId){
+    public List<Category> getCategoriesByUserId(@PathVariable("userId") Long userId){
+
+        //Category category = categoryService.
 
         return null;
     }
