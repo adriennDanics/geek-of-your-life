@@ -31,20 +31,40 @@ public class UserApiTest {
     private UserApi userApi;
 
     private MockMvc mockMvc;
+    private Long id;
+    private User testUser;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
 
         mockMvc = MockMvcBuilders.standaloneSetup(userApi).build();
+
+        id = 1L;
+        testUser = new User("testuser@test.com", "test");
+        testUser.setId(id);
+    }
+
+    //TODO: "/user"
+    @Test
+    public void testCreateNewUser() {
+
+    }
+
+    //TODO: "/user/profile/{id}"
+    @Test
+    public void testcreateNewUserProfile() {
+
+    }
+
+    //TODO: "/users"
+    @ Test
+    public void testGetUserList() {
+
     }
 
     @Test
     public void testGetUserLoginInfo() throws Exception {
-        Long id = 1L;
-        User testUser = new User("testuser@test.com", "test");
-        testUser.setId(id);
-
         when(userService.findById(id)).thenReturn(testUser);
 
         mockMvc.perform(get("/user/{id}", 1))
@@ -57,10 +77,7 @@ public class UserApiTest {
     }
 
     @Test
-    public void testGetUserInfo() throws  Exception {
-        Long id = 1L;
-        User testUser = new User("testuser@test.com", "test");
-        testUser.setId(id);
+    public void testGetUserInfo() throws Exception {
 
         UserDetail testUserDetail = new UserDetail(testUser);
         testUserDetail.setFullName("Test test");
@@ -75,6 +92,19 @@ public class UserApiTest {
                 .andExpect(jsonPath("$.nickName").value("Test"));
         verify(userDetailService, times(1)).findByUserId(1L);
         verifyNoMoreInteractions(userService);
+    }
+
+
+    //TODO: "/user/{userId}/categories"
+    @Test
+    public void testGetCategoriesByUserId() {
+
+    }
+
+    //TODO: "/user/{userId}/{categoryId}"
+    @Test
+    public void testGetQuestionWithAnswer() {
+
     }
 
 

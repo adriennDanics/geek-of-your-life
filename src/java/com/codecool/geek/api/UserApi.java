@@ -35,8 +35,9 @@ public class UserApi {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    //TODO: is this correct? Both of them createNewUser?, changed userProfile
     @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> createNewUser(@PathVariable("id") Long id, @RequestParam("category") String category){
+    public ResponseEntity<?> createNewUserProfile(@PathVariable("id") Long id, @RequestParam("category") String category){
 
         User user = userService.findById(id);
         UserDetail userDetail = new UserDetail(user);
