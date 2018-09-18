@@ -4,6 +4,7 @@ import com.codecool.geek.api.UserApi;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
+import com.codecool.geek.service.CategoryService;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.junit.Before;
@@ -13,10 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +32,9 @@ public class UserApiTest {
 
     @Mock
     private UserDetailService userDetailService;
+
+    @Mock
+    private CategoryService categoryService;
 
     @InjectMocks
     private UserApi userApi;
@@ -66,10 +71,25 @@ public class UserApiTest {
 
     }
 
-    //TODO: "/user/profile/{id}"
     @Test
-    public void testCreateNewUserProfile() {
+    public void testCreateNewUserProfile() throws Exception {
+        UserDetail userDetail = new UserDetail(testUser);
+        Category category = new Category("Sci-fi");
+        Set<Category> categorySet = new HashSet<>();
+        categorySet.add(category);
+        userDetail.setCategories(categorySet);
 
+        mockMvc.perform(post("/user/profile/{id}", 1)
+                .param("category", category.getCategory()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Success"));
+
+        ArgumentCaptor<UserDetail> customerCaptor = ArgumentCaptor.forClass(UserDetail.class);
+        verify(userDetailService).saveUserDetail(customerCaptor.capture());
+
+        UserDetail boundCustomer = customerCaptor.getValue();
+
+        assertEquals(categorySet.toString(), boundCustomer.getCategories().toString());
     }
 
     @ Test

@@ -120,4 +120,19 @@ public class UserDetail {
     public void addCategory(Category category){
         this.categories.add(category);
     }
+
+    @Override
+    public String toString() {
+        return "UserDetail{" +
+                "id=" + id +
+                ", user=" + user +
+                ", fullName='" + fullName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", birthDate=" + birthDate +
+                ", categories=" + categories +
+                ", gender=" + gender +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                '}';
+    }
 }
