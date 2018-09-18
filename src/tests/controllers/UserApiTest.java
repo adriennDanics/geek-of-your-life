@@ -49,11 +49,20 @@ public class UserApiTest {
 
     @Test
     public void testCreateNewUser() throws Exception {
+
+        doNothing().when(userService).saveUser(Matchers.any());
+
         mockMvc.perform(post("/user")
                 .param("password", testUser.getPassword())
                 .param("email", testUser.getEmail()))
                     .andExpect(status().isOk())
-                    .andExpect(content().string("Success"));;
+                    .andExpect(content().string("Success"));
+
+
+        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+
+        verify(userService, times(1)).saveUser(argument.capture());
+        verifyNoMoreInteractions(userService);
 
     }
 
