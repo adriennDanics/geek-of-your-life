@@ -1,6 +1,7 @@
 package controllers;
 
 import com.codecool.geek.api.UserApi;
+import com.codecool.geek.model.customer.Gender;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
@@ -63,11 +64,20 @@ public class UserApiTest {
 
     @Test
     public void testCreateNewUser() throws Exception {
+
+        doNothing().when(userService).saveUser(Matchers.any());
+
         mockMvc.perform(post("/user")
                 .param("password", testUser.getPassword())
                 .param("email", testUser.getEmail()))
                     .andExpect(status().isOk())
-                    .andExpect(content().string("Success"));;
+                    .andExpect(content().string("Success"));
+
+
+        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+
+        verify(userService, times(1)).saveUser(argument.capture());
+        verifyNoMoreInteractions(userService);
 
     }
 
@@ -93,7 +103,7 @@ public class UserApiTest {
     }
 
     @ Test
-    public void testGetUserList() throws Exception{
+    public void testGetUserList() throws Exception {
         when(userService.getAllUsers()).thenReturn(testUserList);
 
         mockMvc.perform(get("/users"))
@@ -127,9 +137,19 @@ public class UserApiTest {
     @Test
     public void testGetUserInfo() throws Exception {
 
+        Date date = new Date();
+        Set<Category> categories = new HashSet();
+        categories.add(new Category("fantastic"));
+
         UserDetail testUserDetail = new UserDetail(testUser);
         testUserDetail.setFullName("Test test");
         testUserDetail.setNickName("Test");
+        testUserDetail.setBirthDate(date);
+        testUserDetail.setCategories(categories);
+        testUserDetail.setGender(Gender.OTHER);
+        testUserDetail.setProfileImage("apple.jpg");
+        testUserDetail.setShortDescription("A lot of apples");
+        testUserDetail.setUser(testUser);
 
         when(userDetailService.findByUserId(id)).thenReturn(testUserDetail);
 
@@ -138,15 +158,30 @@ public class UserApiTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.fullName").value("Test test"))
                 .andExpect(jsonPath("$.nickName").value("Test"));
+
         verify(userDetailService, times(1)).findByUserId(1L);
-        verifyNoMoreInteractions(userService);
+        verifyNoMoreInteractions(userDetailService);
     }
 
-
-    //TODO: "/user/{userId}/categories"
+    
     @Test
-    public void testGetCategoriesByUserId() {
+    public void testGetCategoriesByUserId() throws Exception {
 
+        Set<Category> categories = new HashSet();
+        categories.add(new Category("fantastic"));
+
+        UserDetail testUserDetail = new UserDetail(testUser);
+        testUserDetail.setCategories(categories);
+
+        when(userDetailService.findByUserId(id)).thenReturn(testUserDetail);
+
+        mockMvc.perform(get("/user/{userId}/categories", id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$[0].category").value("fantastic"));
+
+        verify(userDetailService, times(1)).findByUserId(id);
+        verifyNoMoreInteractions(userDetailService);
     }
 
     //TODO: "/user/{userId}/{categoryId}"
