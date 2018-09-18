@@ -17,10 +17,12 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserApiTest {
+
     @Mock
     private UserService userService;
 
@@ -45,20 +47,24 @@ public class UserApiTest {
         testUser.setId(id);
     }
 
-    //TODO: "/user"
     @Test
-    public void testCreateNewUser() {
+    public void testCreateNewUser() throws Exception {
+        mockMvc.perform(post("/user")
+                .param("password", testUser.getPassword())
+                .param("email", testUser.getEmail()))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string("Success"));;
 
     }
 
     //TODO: "/user/profile/{id}"
     @Test
-    public void testcreateNewUserProfile() {
+    public void testCreateNewUserProfile() {
 
     }
 
     //TODO: "/users"
-    @ Test
+    @Test
     public void testGetUserList() {
 
     }
