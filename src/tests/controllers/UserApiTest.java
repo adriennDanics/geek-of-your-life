@@ -14,18 +14,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserApiTest {
+
     @Mock
     private UserService userService;
 
@@ -57,19 +56,22 @@ public class UserApiTest {
 
     }
 
-    //TODO: "/user"
     @Test
-    public void testCreateNewUser() {
+    public void testCreateNewUser() throws Exception {
+        mockMvc.perform(post("/user")
+                .param("password", testUser.getPassword())
+                .param("email", testUser.getEmail()))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string("Success"));;
 
     }
 
     //TODO: "/user/profile/{id}"
     @Test
-    public void testcreateNewUserProfile() {
+    public void testCreateNewUserProfile() {
 
     }
 
-    //TODO: "/users"
     @ Test
     public void testGetUserList() throws Exception{
         when(userService.getAllUsers()).thenReturn(testUserList);
@@ -84,7 +86,6 @@ public class UserApiTest {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].email", is("testuser2@test.com")))
                 .andExpect(jsonPath("$[1].password", is("test2")));
-
 
         verify(userService, times(1)).getAllUsers();
         verifyNoMoreInteractions(userService);
