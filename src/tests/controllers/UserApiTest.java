@@ -82,7 +82,7 @@ public class UserApiTest {
     }
 
     @ Test
-    public void testGetUserList() throws Exception{
+    public void testGetUserList() throws Exception {
         when(userService.getAllUsers()).thenReturn(testUserList);
 
         mockMvc.perform(get("/users"))
@@ -137,15 +137,30 @@ public class UserApiTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.fullName").value("Test test"))
                 .andExpect(jsonPath("$.nickName").value("Test"));
+
         verify(userDetailService, times(1)).findByUserId(1L);
-        verifyNoMoreInteractions(userService);
+        verifyNoMoreInteractions(userDetailService);
     }
 
-
-    //TODO: "/user/{userId}/categories"
+    
     @Test
-    public void testGetCategoriesByUserId() {
+    public void testGetCategoriesByUserId() throws Exception {
 
+        Set<Category> categories = new HashSet();
+        categories.add(new Category("fantastic"));
+
+        UserDetail testUserDetail = new UserDetail(testUser);
+        testUserDetail.setCategories(categories);
+
+        when(userDetailService.findByUserId(id)).thenReturn(testUserDetail);
+
+        mockMvc.perform(get("/user/{userId}/categories", id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$[0].category").value("fantastic"));
+
+        verify(userDetailService, times(1)).findByUserId(id);
+        verifyNoMoreInteractions(userDetailService);
     }
 
     //TODO: "/user/{userId}/{categoryId}"
