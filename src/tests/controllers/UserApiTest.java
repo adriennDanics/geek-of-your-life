@@ -1,6 +1,7 @@
 package controllers;
 
 import com.codecool.geek.api.UserApi;
+import com.codecool.geek.model.customer.Gender;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
@@ -13,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -116,9 +116,19 @@ public class UserApiTest {
     @Test
     public void testGetUserInfo() throws Exception {
 
+        Date date = new Date();
+        Set<Category> categories = new HashSet();
+        categories.add(new Category("fantastic"));
+
         UserDetail testUserDetail = new UserDetail(testUser);
         testUserDetail.setFullName("Test test");
         testUserDetail.setNickName("Test");
+        testUserDetail.setBirthDate(date);
+        testUserDetail.setCategories(categories);
+        testUserDetail.setGender(Gender.OTHER);
+        testUserDetail.setProfileImage("apple.jpg");
+        testUserDetail.setShortDescription("A lot of apples");
+        testUserDetail.setUser(testUser);
 
         when(userDetailService.findByUserId(id)).thenReturn(testUserDetail);
 
