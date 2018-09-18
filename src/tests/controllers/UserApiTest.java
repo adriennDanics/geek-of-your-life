@@ -13,6 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -33,6 +38,7 @@ public class UserApiTest {
     private MockMvc mockMvc;
     private Long id;
     private User testUser;
+    private List<User> testUserList = new ArrayList<>();
 
     @Before
     public void setup(){
@@ -43,6 +49,12 @@ public class UserApiTest {
         id = 1L;
         testUser = new User("testuser@test.com", "test");
         testUser.setId(id);
+        testUserList.add(testUser);
+
+        User newTestUser = new User("testuser2@test.com", "test2");
+        newTestUser.setId(2L);
+        testUserList.add(newTestUser);
+
     }
 
     //TODO: "/user"
@@ -59,8 +71,23 @@ public class UserApiTest {
 
     //TODO: "/users"
     @ Test
-    public void testGetUserList() {
+    public void testGetUserList() throws Exception{
+        when(userService.getAllUsers()).thenReturn(testUserList);
 
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].email", is("testuser@test.com")))
+                .andExpect(jsonPath("$[0].password", is("test")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].email", is("testuser2@test.com")))
+                .andExpect(jsonPath("$[1].password", is("test2")));
+
+
+        verify(userService, times(1)).getAllUsers();
+        verifyNoMoreInteractions(userService);
     }
 
     @Test

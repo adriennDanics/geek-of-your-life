@@ -49,16 +49,8 @@ public class UserApi {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> getUserList(){
 
-        Map<String, Map<String, String>> users = new HashMap<>();
         List<User> userList = userService.getAllUsers();
-
-        for (User user: userList) {
-            Map<String, String> usersInfo = new HashMap<>();
-            usersInfo.put("id", String.valueOf(user.getId()));
-            usersInfo.put("email", user.getEmail());
-            users.put(String.valueOf(user.getId()), usersInfo);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
