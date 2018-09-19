@@ -1,5 +1,6 @@
 package com.codecool.geek.model.questionnaire;
 
+import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 
 import javax.persistence.*;
@@ -66,5 +67,20 @@ public class Category {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void addUser(UserDetail userDetail) {
+        users.add(userDetail);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", image='" + image + '\'' +
+                ", users=" + users +
+                '}';
     }
 }

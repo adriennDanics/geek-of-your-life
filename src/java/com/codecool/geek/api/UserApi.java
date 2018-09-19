@@ -1,5 +1,6 @@
 package com.codecool.geek.api;
 
+import com.codecool.geek.helper.HashPassword;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
@@ -28,15 +29,30 @@ public class UserApi {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    HashPassword hashPassword;
+
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
 
-        userService.saveUser(new User(email, password));
+        userService.saveUser(new User(email, hashPassword.hashPassword(password)));
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public ResponseEntity<?> loginUser(@RequestParam("email") String email, @RequestParam("password") String password){
+        User user = userService.findByEmail(email);
+        boolean isUserRight = hashPassword.isPasswordCorrect(password, user.getPassword());
+        if(isUserRight) {
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Fail", HttpStatus.OK);
+        }
+    }
+
+    //TODO: make new userDetail post method to add birthday, fullname, etc.
     @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> createNewUser(@PathVariable("id") Long id, @RequestParam("category") String category){
+    public ResponseEntity<?> createNewUserProfile(@PathVariable("id") Long id, @RequestParam("category") String category){
 
         User user = userService.findById(id);
         UserDetail userDetail = new UserDetail(user);
@@ -48,16 +64,8 @@ public class UserApi {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> getUserList(){
 
-        Map<String, Map<String, String>> users = new HashMap<>();
         List<User> userList = userService.getAllUsers();
-
-        for (User user: userList) {
-            Map<String, String> usersInfo = new HashMap<>();
-            usersInfo.put("id", String.valueOf(user.getId()));
-            usersInfo.put("email", user.getEmail());
-            users.put(String.valueOf(user.getId()), usersInfo);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
