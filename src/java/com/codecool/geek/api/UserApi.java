@@ -1,5 +1,6 @@
 package com.codecool.geek.api;
 
+import com.codecool.geek.helper.HashPassword;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
@@ -28,11 +29,25 @@ public class UserApi {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    HashPassword hashPassword;
+
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
 
-        userService.saveUser(new User(email, password));
+        userService.saveUser(new User(email, hashPassword.hashPassword(password)));
         return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public ResponseEntity<?> loginUser(@RequestParam("email") String email, @RequestParam("password") String password){
+        User user = userService.findByEmail(email);
+        boolean isUserRight = hashPassword.isPasswordCorrect(password, user.getPassword());
+        if(isUserRight) {
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Fail", HttpStatus.OK);
+        }
     }
 
     //TODO: make new userDetail post method to add birthday, fullname, etc.

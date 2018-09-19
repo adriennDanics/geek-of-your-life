@@ -24,4 +24,9 @@ public class UserService {
     public User findById(Long id){
         return (User) userRepository.findOne(id);
     }
+
+    public User findByEmail(String email){
+        return (User) userRepository.findByEmail(email);
+    }
+
 }
