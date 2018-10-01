@@ -5,6 +5,7 @@ import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
 import com.codecool.geek.service.CategoryService;
+import com.codecool.geek.service.UserAnswerService;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,14 @@ public class UserApi {
     @Autowired
     HashPassword hashPassword;
 
+    @Autowired
+    UserAnswerService userAnswerService;
+
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
-
-        userService.saveUser(new User(email, hashPassword.hashPassword(password)));
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        User user = new User(email, hashPassword.hashPassword(password));
+        userService.saveUser(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
@@ -44,7 +48,7 @@ public class UserApi {
         User user = userService.findByEmail(email);
         boolean isUserRight = hashPassword.isPasswordCorrect(password, user.getPassword());
         if(isUserRight) {
-            return new ResponseEntity<>("Success", HttpStatus.OK);
+            return new ResponseEntity<>(userDetailService.findByUserId(Long.valueOf(user.getId())), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Fail", HttpStatus.OK);
         }
