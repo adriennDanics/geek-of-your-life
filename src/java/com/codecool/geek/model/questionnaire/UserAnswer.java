@@ -10,16 +10,16 @@ public class UserAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Answer answer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Question question;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
     public UserAnswer(User user, Answer answer, Question question, Category category) {
@@ -70,5 +70,16 @@ public class UserAnswer {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAnswer{" +
+                "id=" + id +
+                ", user=" + user +
+                ", answer=" + answer +
+                ", question=" + question +
+                ", category=" + category +
+                '}';
     }
 }

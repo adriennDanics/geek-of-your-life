@@ -4,6 +4,7 @@ import com.codecool.geek.helper.HashPassword;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
+import com.codecool.geek.model.questionnaire.UserAnswer;
 import com.codecool.geek.service.CategoryService;
 import com.codecool.geek.service.UserAnswerService;
 import com.codecool.geek.service.UserDetailService;
@@ -97,20 +98,9 @@ public class UserApi {
     public ResponseEntity<?> getQuestionWithAnswer(@PathVariable("userId") Long userId,
                                       @PathVariable("categoryId") Long categoryId){
 
-        UserDetail user = userDetailService.findByUserId(userId);
-        Set<Category> categories = user.getCategories();
+        List<UserAnswer> userAnswer = userAnswerService.findByUserIdAndCategoryId(userId, categoryId);
 
-        for (Category cat : categories) {
-            if (cat.getId().equals(categoryId)) {
-                return new ResponseEntity<>(cat, HttpStatus.OK);
-            }
-        }
-
-
-        return new ResponseEntity<>("I am a TEAPOT, you're an idiot",HttpStatus.I_AM_A_TEAPOT);
-
-
+        return new ResponseEntity<>(userAnswer, HttpStatus.OK);
     }
-
 
 }

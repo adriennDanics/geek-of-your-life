@@ -1,6 +1,7 @@
 package com.codecool.geek.model.questionnaire;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,9 +17,6 @@ public class Question {
 
     @OneToOne
     private Category category;
-
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers;
 
     public Question(String question) {
         this.question = question;
@@ -43,24 +41,11 @@ public class Question {
         this.question = question;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public void addAnswer(Answer answer){
-        answers.add(answer);
-    }
-
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
-                ", answers=" + answers +
                 '}';
     }
 }
