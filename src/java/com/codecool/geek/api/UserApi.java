@@ -4,7 +4,9 @@ import com.codecool.geek.helper.HashPassword;
 import com.codecool.geek.model.customer.User;
 import com.codecool.geek.model.customer.UserDetail;
 import com.codecool.geek.model.questionnaire.Category;
+import com.codecool.geek.model.questionnaire.UserAnswer;
 import com.codecool.geek.service.CategoryService;
+import com.codecool.geek.service.UserAnswerService;
 import com.codecool.geek.service.UserDetailService;
 import com.codecool.geek.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +34,22 @@ public class UserApi {
     @Autowired
     HashPassword hashPassword;
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
+    @Autowired
+    UserAnswerService userAnswerService;
 
-        userService.saveUser(new User(email, hashPassword.hashPassword(password)));
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ResponseEntity<?> createNewUser(@RequestBody User user){
+        User newUser = new User(user.getEmail(), hashPassword.hashPassword(user.getPassword()));
+        userService.saveUser(newUser);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<?> loginUser(@RequestParam("email") String email, @RequestParam("password") String password){
-        User user = userService.findByEmail(email);
-        boolean isUserRight = hashPassword.isPasswordCorrect(password, user.getPassword());
+    public ResponseEntity<?> loginUser(@RequestBody User user){
+        User loginUser = userService.findByEmail(user.getEmail());
+        boolean isUserRight = hashPassword.isPasswordCorrect(user.getPassword(), loginUser.getPassword());
         if(isUserRight) {
-            return new ResponseEntity<>("Success", HttpStatus.OK);
+            return new ResponseEntity<>(userService.findById(loginUser.getId()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Fail", HttpStatus.OK);
         }
@@ -93,20 +98,9 @@ public class UserApi {
     public ResponseEntity<?> getQuestionWithAnswer(@PathVariable("userId") Long userId,
                                       @PathVariable("categoryId") Long categoryId){
 
-        UserDetail user = userDetailService.findByUserId(userId);
-        Set<Category> categories = user.getCategories();
+        List<UserAnswer> userAnswer = userAnswerService.findByUserIdAndCategoryId(userId, categoryId);
 
-        for (Category cat : categories) {
-            if (cat.getId().equals(categoryId)) {
-                return new ResponseEntity<>(cat, HttpStatus.OK);
-            }
-        }
-
-
-        return new ResponseEntity<>("I am a TEAPOT, you're an idiot",HttpStatus.I_AM_A_TEAPOT);
-
-
+        return new ResponseEntity<>(userAnswer, HttpStatus.OK);
     }
-
 
 }

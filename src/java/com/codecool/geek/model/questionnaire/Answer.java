@@ -14,7 +14,6 @@ public class Answer {
 
     private String answer;
 
-
     public Answer() {
     }
 
