@@ -38,18 +38,18 @@ public class UserApi {
     UserAnswerService userAnswerService;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<?> createNewUser(@RequestParam("email") String email, @RequestParam("password") String password){
-        User user = new User(email, hashPassword.hashPassword(password));
-        userService.saveUser(user);
+    public ResponseEntity<?> createNewUser(@RequestBody User user){
+        User newUser = new User(user.getEmail(), hashPassword.hashPassword(user.getPassword()));
+        userService.saveUser(newUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<?> loginUser(@RequestParam("email") String email, @RequestParam("password") String password){
-        User user = userService.findByEmail(email);
-        boolean isUserRight = hashPassword.isPasswordCorrect(password, user.getPassword());
+    public ResponseEntity<?> loginUser(@RequestBody User user){
+        User loginUser = userService.findByEmail(user.getEmail());
+        boolean isUserRight = hashPassword.isPasswordCorrect(user.getPassword(), loginUser.getPassword());
         if(isUserRight) {
-            return new ResponseEntity<>(userDetailService.findByUserId(Long.valueOf(user.getId())), HttpStatus.OK);
+            return new ResponseEntity<>(userService.findById(loginUser.getId()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Fail", HttpStatus.OK);
         }
