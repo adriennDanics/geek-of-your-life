@@ -103,4 +103,11 @@ public class UserApi {
         return new ResponseEntity<>(userAnswer, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/categories", method = RequestMethod.GET)
+    public ResponseEntity<?> getCategories(){
+
+        List<Category> categories = categoryService.getAllCategoryDetails();
+
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
 }
